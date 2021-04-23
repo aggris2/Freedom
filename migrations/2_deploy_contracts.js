@@ -1,6 +1,5 @@
-var Freedom = artifacts.require("./Freedom.sol");
+const Freedom = artifacts.require("Freedom");
 
-module.exports = function(deployer)
-{
-	deployer.deploy(Freedom);
+module.exports = function (deployer) {
+  deployer.deploy(Freedom);
 };
