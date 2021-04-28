@@ -57,4 +57,24 @@ contract('FreedomSale', function(accounts) {
 			assert(error.message.indexOf('revert') >= 0, 'cannot purchase more tokens than available');
 		});
 	});
+
+	it('ends token sale', function() {
+		return Freedom.deployed().then(function(instance) {
+			FreedomInstance = instance;
+			return FreedomSale.deployed();
+		}).then(function(instance) {
+			FreedomSaleInstance = instance;
+			return FreedomSaleInstance.endSale({ from: buyer });
+		}).then(assert.fail).catch(function(error) {
+			assert(error.message.indexOf('revert' >= 0, 'must be admin to end sale'));
+			return FreedomSaleInstance.endSale({ from: admin });
+		}).then(function(receipt) {
+			return FreedomInstance.balanceOf(admin);
+		}).then(function(balance) {
+			assert.equal(balance.toNumber(), 999990, 'returns all unsold tokens to admin');
+			return balance = web3.eth.getBalance(FreedomSaleInstance.address);
+        }).then(function(balance) {
+            assert.equal(balance, 0);
+		});
+	});
 });
